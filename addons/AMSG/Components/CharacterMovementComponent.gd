@@ -566,6 +566,9 @@ func add_movement_input(direction: Vector3 = Vector3.ZERO, Speed: float = 0, Acc
 		if is_flying == false:
 			character_node.velocity.x = lerp(character_node.velocity.x,(direction*max_speed).x,Acceleration/(max_speed if max_speed != 0 else (abs(character_node.velocity.x) if character_node.velocity.x != 0 else 1.0))*get_physics_process_delta_time())
 			character_node.velocity.z = lerp(character_node.velocity.z,(direction*max_speed).z,Acceleration/(max_speed if max_speed != 0 else (abs(character_node.velocity.z) if character_node.velocity.z != 0 else 1.0))*get_physics_process_delta_time())
+			# set to 0 if the character is not moving
+			if character_node.velocity.length() < 0.1:
+				character_node.velocity = Vector3.ZERO
 		else:
 			character_node.velocity = character_node.velocity.lerp((direction*max_speed),Acceleration/(max_speed if max_speed != 0 else character_node.velocity.x if character_node.velocity.x != 0 else 1.0)*get_physics_process_delta_time())
 			character_node.move_and_slide()

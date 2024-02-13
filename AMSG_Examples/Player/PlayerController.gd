@@ -25,9 +25,9 @@ var direction := Vector3.ZERO
 @export var lock_system : LockSystem
 #####################################
 
-@export var mouse_sensitivity : float = 0.01
+@export var mouse_sensitivity : float = 0.001
 
-
+var is_fire_pressed: bool = false
 
 
 func _ready():
@@ -49,7 +49,7 @@ func _physics_process(delta):
 	if !networking.is_local_authority():
 		return
 	
-	if lock_system != null && lock_system.is_locked:
+	if (lock_system != null && lock_system.is_locked) || is_fire_pressed:
 		direction = Vector3.ZERO
 		character_component.add_movement_input()
 		return
@@ -145,10 +145,12 @@ func _input(event):
 		character_component.camera_root.camera_v += -event.relative.y * mouse_sensitivity
 	#------------------ Motion Warping test------------------#
 	if event.is_action_pressed("fire"):
+		is_fire_pressed = true
 		character_component.anim_ref.active = false
-		get_node("../MotionWarping").add_sync_position(Vector3(4.762,1.574,-1.709),Vector3(0,PI,0),"kick_target",self,character_component.mesh_ref)
+		get_node("../MotionWarping").add_sync_position(Vector3(4.762, 1.574, -1.709), Vector3(0, PI, 0), "kick_target", self, character_component.mesh_ref)
 		get_node("../AnimationPlayer").play("Kick")
 		await get_tree().create_timer(2.6).timeout
+		is_fire_pressed = false
 		character_component.anim_ref.active = true
 		
 	#------------------ Change Camera View ------------------#
