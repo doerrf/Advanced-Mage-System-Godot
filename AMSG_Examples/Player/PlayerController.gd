@@ -141,6 +141,15 @@ func _input(event):
 	if event is InputEventMouseMotion:
 		if !character_component or !controls_the_possessed_character:
 			return
+		var mouse_movement = event.relative
+		var upfactor = 1
+		if -(mouse_movement.y) >= (upfactor * mouse_movement.x) and -(mouse_movement.y) >= -(upfactor * mouse_movement.x):
+			print("up")
+		else:
+			if mouse_movement.x < 0:
+				print("left")
+			elif mouse_movement.x > 0:
+				print("right")
 		character_component.camera_root.camera_h += -event.relative.x * mouse_sensitivity
 		character_component.camera_root.camera_v += -event.relative.y * mouse_sensitivity
 	#------------------ Motion Warping test------------------#
